@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Velora Beauty</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap');
+*{box-sizing:border-box}body{margin:0;font-family:Cairo,Arial;background:#fff8fa;color:#211a1d}
+header{position:sticky;top:0;z-index:5;background:#fff8fadd;backdrop-filter:blur(12px);padding:18px 7%;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 18px #0001}
+.logo{font-size:25px;font-weight:800}.logo span{color:#db5b87}
+nav a{margin:0 10px;text-decoration:none;color:#211a1d;font-size:13px}
+.hero{margin:25px auto;max-width:1200px;width:90%;min-height:400px;border-radius:28px;background:linear-gradient(110deg,#f5d8e2,#f7ebe4);display:flex;align-items:center;overflow:hidden;animation:show .8s}
+.heroText{padding:45px;flex:1}.hero h1{font-size:clamp(30px,5vw,60px);line-height:1.4}.hero p{color:#76676d;line-height:2}
+.hero img{width:43%;height:430px;object-fit:cover}
+.btn,.add{border:0;background:#211a1d;color:#fff;border-radius:28px;padding:13px 25px;cursor:pointer;transition:.3s}.btn:hover,.add:hover{background:#db5b87;transform:translateY(-3px)}
+section{max-width:1200px;width:90%;margin:45px auto}.cats{display:flex;gap:12px;flex-wrap:wrap}.cat{background:#fff;border:1px solid #f0dce3;border-radius:22px;padding:12px 22px;cursor:pointer}.cat.active{background:#db5b87;color:white}
+.toolbar{display:flex;gap:12px;margin:20px 0}.search,select{padding:12px 18px;border:1px solid #eadfe3;border-radius:25px;background:#fff}.search{flex:1}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 5px 22px #0000000a;transition:.3s;animation:show .6s}.card:hover{transform:translateY(-7px)}.card img{width:100%;height:240px;object-fit:cover}.info{padding:15px}.info h3{font-size:14px}.price{color:#db5b87;font-weight:800;margin:12px 0}.add{width:100%;border-radius:10px;padding:10px}
+.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:10}.overlay.open{display:block}.panel{background:white;position:absolute;right:0;top:0;width:min(430px,100%);height:100%;padding:25px;overflow:auto}.item{display:flex;gap:10px;align-items:center;border-bottom:1px solid #eee;padding:12px 0}.item img{width:65px;height:75px;object-fit:cover;border-radius:9px}.item h4{font-size:12px}.item p{font-size:12px;color:#db5b87}.close{float:left;border:0;border-radius:50%;padding:8px;cursor:pointer}.wa{display:block;background:#20a85a;color:white;text-align:center;padding:13px;border-radius:10px;text-decoration:none}
+footer{background:#211a1d;color:white;padding:35px 7%;margin-top:60px}footer p{color:#cbbfc4;font-size:13px}
+@keyframes show{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.hero{display:block}.hero img{width:100%;height:220px}.heroText{padding:28px}nav{display:none}}
+</style>
+</head>
+<body>
+<header><div class="logo">VELORA <span>Beauty</span></div><nav><a href="#home">الرئيسية</a><a href="#products">المنتجات</a><a href="#contact">تواصل معنا</a></nav><button class="btn" onclick="openCart()">🛍️ <span id="count">0</span></button></header>
+<main id="home">
+<div class="hero"><div class="heroText"><small style="color:#db5b87;font-weight:bold">NEW BEAUTY COLLECTION</small><h1>جمالك يبدأ من هنا ✨</h1><p>اكتشفي مستحضرات التجميل التي تكمل إطلالتك، بتصميم فاخر وحركات ناعمة.</p><button class="btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">تسوقي الآن ←</button></div><img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=85"></div>
+<section><h2>الأقسام</h2><div class="cats"><button class="cat active" data-cat="الكل">✨ الكل</button><button class="cat" data-cat="شفاه">💄 الشفاه</button><button class="cat" data-cat="عيون">👁️ العيون</button><button class="cat" data-cat="بشرة">🌸 البشرة</button></div></section>
+<section id="products"><h2>منتجات مميزة</h2><div class="toolbar"><input class="search" id="search" placeholder="🔎 ابحثي عن منتج..." oninput="render()"><select id="sort" onchange="render()"><option value="default">الترتيب</option><option value="low">الأقل سعراً</option><option value="high">الأعلى سعراً</option></select></div><div class="grid" id="grid"></div></section>
+</main>
+<footer id="contact"><h2>VELORA Beauty</h2><p>جمالك يستحق عناية خاصة • المغرب</p><p>📞 +212 6 00 00 00 00</p></footer>
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeCart()"><div class="panel"><button class="close" onclick="closeCart()">✕</button><h2>🛒 السلة</h2><div id="items"></div><h3 id="sum">المجموع: 0 درهم</h3><a id="wa" class="wa" target="_blank">إتمام الطلب عبر واتساب</a></div></div>
+<script>
+const products=[
+{id:1,n:'روج وردي فاخر',c:'شفاه',p:129,i:'https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=600&q=80'},
+{id:2,n:'باليت ظلال العيون',c:'عيون',p:249,i:'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80'},
+{id:3,n:'ماسكارا سوداء',c:'عيون',p:99,i:'https://images.unsplash.com/photo-1631214524020-7e18db9e8f4b?auto=format&fit=crop&w=600&q=80'},
+{id:4,n:'كريم ترطيب للوجه',c:'بشرة',p:179,i:'https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=600&q=80'},
+{id:5,n:'ملمع شفاه',c:'شفاه',p:89,i:'https://images.unsplash.com/photo-1619451334792-150fd785ee74?auto=format&fit=crop&w=600&q=80'},
+{id:6,n:'بودرة وجه',c:'بشرة',p:159,i:'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80'},
+{id:7,n:'أحمر خدود',c:'بشرة',p:119,i:'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=80'},
+{id:8,n:'قلم تحديد العيون',c:'عيون',p:79,i:'https://images.unsplash.com/photo-1512207846876-bb54ef505c2f?auto=format&fit=crop&w=600&q=80'}];
+let cat='الكل',cart=[];
+function render(){let q=search.value.toLowerCase(),a=products.filter(x=>(cat==='الكل'||x.c===cat)&&x.n.toLowerCase().includes(q));if(sort.value==='low')a.sort((x,y)=>x.p-y.p);if(sort.value==='high')a.sort((x,y)=>y.p-x.p);grid.innerHTML=a.map(x=>`<article class="card"><img src="${x.i}" alt="${x.n}"><div class="info"><h3>${x.n}</h3><div>★★★★★</div><div class="price">${x.p} درهم</div><button class="add" onclick="add(${x.id})">أضيفي للسلة 🛒</button></div></article>`).join('')}
+function add(id){let x=cart.find(a=>a.id===id);if(x)x.q++;else cart.push({...products.find(a=>a.id===id),q:1});update();openCart()}
+function update(){count.textContent=cart.reduce((s,x)=>s+x.q,0);items.innerHTML=cart.map(x=>`<div class="item"><img src="${x.i}"><div style="flex:1"><h4>${x.n}</h4><p>${x.p} درهم × ${x.q}</p><button onclick="change(${x.id},-1)">−</button> ${x.q} <button onclick="change(${x.id},1)">+</button></div><button onclick="cart=cart.filter(a=>a.id!==${x.id});update()">حذف</button></div>`).join('')||'<p>السلة فارغة</p>';let t=cart.reduce((s,x)=>s+x.p*x.q,0);sum.textContent='المجموع: '+t+' درهم';wa.href='https://wa.me/212600000000?text='+encodeURIComponent('السلام عليكم، أريد طلب: '+cart.map(x=>x.n+' × '+x.q).join(', ')+' | المجموع '+t+' درهم')}
+function change(id,n){let x=cart.find(a=>a.id===id);if(x)x.q+=n;if(x&&x.q<=0)cart=cart.filter(a=>a.id!==id);update()}
+function openCart(){overlay.classList.add('open');update()}function closeCart(){overlay.classList.remove('open')}
+document.querySelectorAll('.cat').forEach(x=>x.onclick=()=>{document.querySelectorAll('.cat').forEach(a=>a.classList.remove('active'));x.classList.add('active');cat=x.dataset.cat;render()});render();update();
+</script>
+</body>
+</html>
