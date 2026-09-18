@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laayoune Food | مطعم العيون</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Tahoma,sans-serif;
+  background:#f7f7f7;
+  color:#171717;
+}
+
+header{
+  background:#111;
+  color:white;
+  padding:18px 6%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  box-shadow:0 3px 15px #0003;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+}
+
+.logo span{
+  color:#ff4d22;
+}
+
+.cart-btn{
+  background:#ff4d22;
+  color:white;
+  border:0;
+  padding:12px 18px;
+  border-radius:30px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.hero{
+  min-height:430px;
+  padding:70px 7%;
+  display:flex;
+  align-items:center;
+  background:
+  linear-gradient(90deg,#000c,#0004),
+  url("https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1600&q=80")
+  center/cover;
+  color:white;
+}
+
+.hero-content{
+  max-width:600px;
+}
+
+.hero h1{
+  font-size:48px;
+  margin-bottom:15px;
+}
+
+.hero h1 span{
+  color:#ff5a28;
+}
+
+.hero p{
+  font-size:18px;
+  line-height:1.8;
+  margin-bottom:25px;
+}
+
+.hero-btn{
+  display:inline-block;
+  background:#ff4d22;
+  color:white;
+  text-decoration:none;
+  padding:15px 25px;
+  border-radius:30px;
+  font-weight:bold;
+}
+
+.container{
+  width:90%;
+  max-width:1200px;
+  margin:40px auto;
+}
+
+.search{
+  width:100%;
+  padding:16px 20px;
+  border:1px solid #ddd;
+  border-radius:30px;
+  font-size:16px;
+  outline:none;
+  margin-bottom:20px;
+}
+
+.categories{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:10px;
+}
+
+.categories button{
+  white-space:nowrap;
+  border:0;
+  background:white;
+  padding:12px 20px;
+  border-radius:25px;
+  cursor:pointer;
+  box-shadow:0 3px 12px #0001;
+  font-weight:bold;
+}
+
+.categories button.active,
+.categories button:hover{
+  background:#ff4d22;
+  color:white;
+}
+
+.section-title{
+  margin:35px 0 20px;
+  font-size:28px;
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:22px;
+}
+
+.card{
+  background:white;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 5px 20px #00000012;
+  transition:.25s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+}
+
+.card-img{
+  height:190px;
+  width:100%;
+  object-fit:cover;
+}
+
+.card-body{
+  padding:18px;
+}
+
+.badge{
+  display:inline-block;
+  background:#fff0eb;
+  color:#ff4d22;
+  padding:5px 10px;
+  border-radius:15px;
+  font-size:12px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.card h3{
+  font-size:20px;
+  margin-bottom:8px;
+}
+
+.card p{
+  color:#777;
+  line-height:1.6;
+  min-height:45px;
+}
+
+.card-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:15px;
+}
+
+.price{
+  color:#ff4d22;
+  font-size:21px;
+  font-weight:900;
+}
+
+.add{
+  border:0;
+  background:#111;
+  color:white;
+  padding:10px 15px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+.cart{
+  position:fixed;
+  top:0;
+  left:-420px;
+  width:390px;
+  max-width:92%;
+  height:100vh;
+  background:white;
+  z-index:2000;
+  box-shadow:5px 0 30px #0003;
+  padding:25px;
+  transition:.3s;
+  overflow-y:auto;
+}
+
+.cart.open{
+  left:0;
+}
+
+.cart-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.close{
+  border:0;
+  background:#eee;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:20px;
+}
+
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:15px 0;
+  border-bottom:1px solid #eee;
+}
+
+.qty{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.qty button{
+  border:0;
+  background:#eee;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  cursor:pointer;
+}
+
+.total{
+  font-size:23px;
+  font-weight:bold;
+  margin:25px 0;
+  display:flex;
+  justify-content:space-between;
+}
+
+.form input,
+.form textarea,
+.form select{
+  width:100%;
+  padding:14px;
+  margin-bottom:12px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  font-size:15px;
+  font-family:inherit;
+}
+
+.form textarea{
+  min-height:80px;
+  resize:vertical;
+}
+
+.order-btn{
+  width:100%;
+  border:0;
+  background:#25d366;
+  color:white;
+  padding:16px;
+  border-radius:12px;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:#0008;
+  z-index:1500;
+  display:none;
+}
+
+.overlay.show{
+  display:block;
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  padding:30px 0;
+}
+
+footer{
+  background:#111;
+  color:white;
+  text-align:center;
+  padding:35px 20px;
+  margin-top:60px;
+}
+
+footer strong{
+  color:#ff4d22;
+}
+
+@media(max-width:600px){
+  .hero{
+    min-height:380px;
+    padding:50px 6%;
+  }
+
+  .hero h1{
+    font-size:35px;
+  }
+
+  .hero p{
+    font-size:16px;
+  }
+
+  .products{
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .card-img{
+    height:135px;
+  }
+
+  .card-body{
+    padding:12px;
+  }
+
+  .card h3{
+    font-size:16px;
+  }
+
+  .card p{
+    font-size:13px;
+  }
+
+  .price{
+    font-size:17px;
+  }
+
+  .add{
+    padding:8px 10px;
+    font-size:12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Laayoune <span>Food</span></div>
+  <button class="cart-btn" onclick="openCart()">
+    🛒 السلة (<span id="count">0</span>)
+  </button>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>أشهى المأكولات في <span>العيون</span> 🍔</h1>
+    <p>
+      برغر، بيتزا، تاكوس وسندويتشات محضّرة بعناية.
+      اختار طلبك وخليه يوصل حتى عندك.
+    </p>
+    <a href="#menu" class="hero-btn">شوف المينيو 🍴</a>
+  </div>
+</section>
+
+<main class="container" id="menu">
+
+  <input
+    class="search"
+    id="search"
+    type="search"
+    placeholder="🔎 قلب على الماكلة اللي بغيتي..."
+    oninput="render()"
+  >
+
+  <div class="categories">
+    <button class="active" onclick="setCategory('all',this)">الكل</button>
+    <button onclick="setCategory('burger',this)">🍔 Burger</button>
+    <button onclick="setCategory('pizza',this)">🍕 Pizza</button>
+    <button onclick="setCategory('tacos',this)">🌮 Tacos</button>
+    <button onclick="setCategory('sandwich',this)">🥪 Sandwich</button>
+    <button onclick="setCategory('chicken',this)">🍗 Chicken</button>
+  </div>
+
+  <h2 class="section-title">🔥 المينيو ديالنا</h2>
+
+  <div class="products" id="products"></div>
+
+</main>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<aside class="cart" id="cart">
+
+  <div class="cart-head">
+    <h2>🛒 طلبك</h2>
+    <button class="close" onclick="closeCart()">×</button>
+  </div>
+
+  <div id="cartItems"></div>
+
+  <div class="total">
+    <span>المجموع</span>
+    <span><span id="total">0</span> DH</span>
+  </div>
+
+  <div class="form">
+
+    <input id="customerName" placeholder="الاسم الكامل">
+
+    <input id="customerPhone" type="tel" placeholder="رقم الهاتف">
+
+    <textarea id="address" placeholder="العنوان ديال التوصيل"></textarea>
+
+    <select id="delivery">
+      <option value="التوصيل"🛵 التوصيل</option>
+      <option value="الاستلام من المحل">🏪 الاستلام من المحل</option>
+    </select>
+
+    <textarea id="note" placeholder="ملاحظة إضافية (اختياري)"></textarea>
+
+    <button class="order-btn" onclick="sendOrder()">
+      📱 إرسال الطلب عبر WhatsApp
+    </button>
+
+  </div>
+
+</aside>
+
+<footer>
+  <strong>Laayoune Food</strong>
+  <p>مطعم ومأكولات سريعة — العيون، المغرب</p>
+  <p>© 2026 جميع الحقوق محفوظة</p>
+</footer>
+
+<script>
+
+const whatsappNumber = "212643067592";
+
+const products = [
+
+{
+ id:1,
+ name:"Classic Burger",
+ price:35,
+ cat:"burger",
+ desc:"لحم، جبن، خس وصوص خاص",
+ img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+ id:2,
+ name:"Cheese Burger",
+ price:40,
+ cat:"burger",
+ desc:"برغر بالجبن وصوص خاص",
+ img:"https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+ id:3,
+ name:"Pizza Margherita",
+ price:45,
+ cat:"pizza",
+ desc:"طماطم، جبن ومكونات طازجة",
+ img:"https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+ id:4,
+ name:"Pizza Poulet",
+ price:55,
+ cat:"pizza",
+ desc:"دجاج، جبن وصوص البيتزا",
+ img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+ id:5,
+ name:"Tacos Poulet",
+ price:40,
+ cat:"tacos",
+ desc:"دجاج، جبن وصوصات",
+ img:"https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+ id:6,
+ name:"Tacos Viande",
+ price:45,
+ cat:"tacos",
+ desc:"لحم، جبن وصوصات",
+ img:"https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+ id:7,
+ name:"Chicken Sandwich",
+ price:30,
+ cat:"sandwich",
+ desc:"دجاج، خضرة وصوص",
+ img:"https://images.unsplash.com/photo-1521390188846-e2a3a97453a0?auto=format&fit=crop&w=800&q=80"
+},
+
+{
+ id:8,
+ name:"Chicken Crispy",
+ price:42,
+ cat:"chicken",
+ desc:"دجاج مقرمش مع صوص خاص",
+ img:"https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=800&q=80"
+}
+
+];
+
+let cart = [];
+let category = "all";
+
+function setCategory(cat,button){
+
+  category = cat;
+
+  document.querySelectorAll(".categories button")
+    .forEach(b => b.classList.remove("active"));
+
+  button.classList.add("active");
+
+  render();
+}
+
+function render(){
+
+  const search =
+    document.getElementById("search").value.toLowerCase();
+
+  const box =
+    document.getElementById("products");
+
+  const filtered = products.filter(p => {
+
+    const matchCategory =
+      category === "all" || p.cat === category;
+
+    const matchSearch =
+      p.name.toLowerCase().includes(search) ||
+      p.desc.toLowerCase().includes(search);
+
+    return matchCategory && matchSearch;
+  });
+
+  if(!filtered.length){
+    box.innerHTML =
+      '<div class="empty">ما لقيناش هاد المنتج 😅</div>';
+    return;
+  }
+
+  box.innerHTML = filtered.map(p => `
+
+    <div class="card">
+
+      <img
+        class="card-img"
+        src="${p.img}"
+        alt="${p.name}"
+      >
+
+      <div class="card-body">
+
+        <span class="badge">
+          ${p.id <= 2 ? "⭐ الأكثر طلباً" : "طازج اليوم"}
+        </span>
+
+        <h3>${p.name}</h3>
+
+        <p>${p.desc}</p>
+
+        <div class="card-bottom">
+
+          <span class="price">${p.price} DH</span>
+
+          <button class="add" onclick="add(${p.id})">
+            + أضف
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `).join("");
+}
+
+function add(id){
+
+  const product = products.find(p => p.id === id);
+
+  const existing = cart.find(item => item.id === id);
+
+  if(existing){
+    existing.qty++;
+  }else{
+    cart.push({
+      ...product,
+      qty:1
+    });
+  }
+
+  update();
+  openCart();
+}
+
+function change(id,amount){
+
+  const item = cart.find(p => p.id === id);
+
+  if(!item) return;
+
+  item.qty += amount;
+
+  if(item.qty <= 0){
+    cart = cart.filter(p => p.id !== id);
+  }
+
+  update();
+}
+
+function update(){
+
+  const items =
+    document.getElementById("cartItems");
+
+  document.getElementById("count").textContent =
+    cart.reduce((sum,item) => sum + item.qty,0);
+
+  if(cart.length === 0){
+
+    items.innerHTML =
+      '<div class="empty">السلة خاوية 🛒</div>';
+
+    document.getElementById("total").textContent = "0";
+
+    return;
+  }
+
+  items.innerHTML = cart.map(item => `
+
+    <div class="cart-item">
+
+      <div>
+        <strong>${item.name}</strong>
+        <div>${item.price} DH × ${item.qty}</div>
+      </div>
+
+      <div class="qty">
+        <button onclick="change(${item.id},1)">+</button>
+        <span>${item.qty}</span>
+        <button onclick="change(${item.id},-1)">−</button>
+      </div>
+
+    </div>
+
+  `).join("");
+
+  const total =
+    cart.reduce(
+      (sum,item) => sum + item.price * item.qty,
+      0
+    );
+
+  document.getElementById("total").textContent = total;
+}
+
+function openCart(){
+
+  document.getElementById("cart")
+    .classList.add("open");
+
+  document.getElementById("overlay")
+    .classList.add("show");
+}
+
+function closeCart(){
+
+  document.getElementById("cart")
+    .classList.remove("open");
+
+  document.getElementById("overlay")
+    .classList.remove("show");
+}
+
+function sendOrder(){
+
+  if(cart.length === 0){
+    alert("السلة خاوية، زيد شي منتج الأول.");
+    return;
+  }
+
+  const name =
+    document.getElementById("customerName").value.trim();
+
+  const phone =
+    document.getElementById("customerPhone").value.trim();
+
+  const address =
+    document.getElementById("address").value.trim();
+
+  const delivery =
+    document.getElementById("delivery").value;
+
+  const note =
+    document.getElementById("note").value.trim();
+
+  if(!name || !phone){
+    alert("دخل الاسم ورقم الهاتف من فضلك.");
+    return;
+  }
+
+  let message =
+    "🍔 *طلب جديد من Laayoune Food*%0A%0A";
+
+  message +=
+    "👤 الاسم: " + name + "%0A";
+
+  message +=
+    "📞 الهاتف: " + phone + "%0A";
+
+  message +=
+    "🛵 الطريقة: " + delivery + "%0A";
+
+  if(address){
+    message +=
+      "📍 العنوان: " + address + "%0A";
+  }
+
+  message += "%0A🛒 *الطلب:*%0A";
+
+  cart.forEach(item => {
+
+    message +=
+      "• " +
+      item.name +
+      " × " +
+      item.qty +
+      " = " +
+      (item.price * item.qty) +
+      " DH%0A";
+
+  });
+
+  const total =
+    cart.reduce(
+      (sum,item) => sum + item.price * item.qty,
+      0
+    );
+
+  message +=
+    "%0A💰 *المجموع: " +
+    total +
+    " DH*%0A";
+
+  if(note){
+    message +=
+      "📝 ملاحظة: " + note;
+  }
+
+  window.open(
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    message,
+    "_blank"
+  );
+}
+
+render();
+update();
+
+</script>
+
+</body>
+</html>
